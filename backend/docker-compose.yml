@@ -1,0 +1,67 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/dekanat_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_PROFILES_ACTIVE=dev
+      - SERVER_PORT=8080
+      - SPRING_DATA_REDIS_URL=redis://redis:6379
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PASSWORD=session
+      - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_SESSION_TIMEOUT=1m
+      - SPRING_SESSION_REDIS_NAMESPACE=spring:session
+      - SPRING_SESSION_REDIS_FLUSH_MODE=on_save
+      - SPRING_SESSION_REDIS_CLEANUP_CRON=0 * * * * *
+      - SPRING_JPA_GENERATE_DDL=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_JPA_OPEN_IN_VIEW=false
+      - SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION=true
+      - SPRING_SQL_INIT_MODE=always
+      - SPRING_SQL_INIT_CONTINUE_ON_ERROR=true
+      - SPRING_JPA_PROPERTIES_JAKARTA_PERSISTENCE_SHARED_CACHE_MODE=ALL
+      - SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_LOB_NON_CONTEXTUAL_CREATION=true
+      - SERVER_SERVLET_SESSION_TIMEOUT=1m
+      - SERVER_SERVLET_SESSION_TRACKING_MODES=cookie
+      - SERVER_SERVLET_SESSION_COOKIE_HTTP_ONLY=true
+      - SERVER_SERVLET_SESSION_COOKIE_SECURE=false
+      - SERVER_SERVLET_SESSION_COOKIE_NAME=JSESSIONID
+      - SERVER_SERVLET_SESSION_COOKIE_DOMAIN=localhost
+      - SERVER_SERVLET_SESSION_COOKIE_PATH=/
+      - SERVER_SERVLET_SESSION_COOKIE_MAX_AGE=600
+      - SERVER_SERVLET_SESSION_COOKIE_SAME_SITE=strict
+      - ADMIN_EMAIL=admin@admin.com
+      - CUSTOM_MAX_SESSION=100
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: "postgres:15"
+    container_name: postgres
+    environment:
+      POSTGRES_DB: dekanat_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: session
+
+volumes: {}

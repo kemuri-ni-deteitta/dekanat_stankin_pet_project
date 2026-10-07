@@ -1,0 +1,1784 @@
+openapi: 3.0.4
+info:
+  title: Session Auth API - Document Management
+  description: API for managing documents in the Session Authentication system
+  version: 1.0.0
+  contact:
+    email: support@example.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+  - url: https://api.example.com/api/v1
+    description: Production server
+tags:
+  - name: Document
+    description: Operations about documents
+  - name: Employee
+    description: Operations about employees
+  - name: Institute
+    description: Operations about institutes
+  - name: JobTitle
+    description: Operations about job titles
+  - name: Kafedra
+    description: Operations about kafedras (departments)
+  - name: Scholarship
+    description: Operations about scholarships
+  - name: Student
+    description: Operations about students
+  - name: Subdivision
+    description: Operations about subdivisions
+paths:
+  /subdivisions/create:
+    post:
+      tags:
+        - Subdivision
+      summary: Create a new subdivision
+      description: Creates a new subdivision with the provided details. Requires ADMIN authority.
+      operationId: createSubdivision
+      security:
+        - bearerAuth: [ADMIN]
+      requestBody:
+        description: Subdivision to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubdivisionDTO'
+      responses:
+        '201':
+          description: Subdivision created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubdivisionDTO'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /subdivisions/{id}:
+    get:
+      tags:
+        - Subdivision
+      summary: Get subdivision by ID
+      description: Returns a single subdivision by its ID. Requires ADMIN authority.
+      operationId: getSubdivisionById
+      security:
+        - bearerAuth: [ADMIN]
+      parameters:
+        - name: id
+          in: path
+          description: ID of subdivision to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubdivisionDTO'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Subdivision not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Subdivision
+      summary: Update an existing subdivision
+      description: Updates an existing subdivision. Requires ADMIN authority.
+      operationId: updateSubdivision
+      security:
+        - bearerAuth: [ADMIN]
+      parameters:
+        - name: id
+          in: path
+          description: ID of subdivision to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Subdivision data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubdivisionDTO'
+      responses:
+        '200':
+          description: Subdivision updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubdivisionDTO'
+        '400':
+          description: Invalid ID or input
+        '404':
+          description: Subdivision not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Subdivision
+      summary: Delete a subdivision
+      description: Deletes a subdivision by ID. Requires ADMIN authority.
+      operationId: deleteSubdivision
+      security:
+        - bearerAuth: [ADMIN]
+      parameters:
+        - name: id
+          in: path
+          description: ID of subdivision to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Subdivision deleted successfully
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Subdivision not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /subdivisions/getAll:
+    get:
+      tags:
+        - Subdivision
+      summary: Get all subdivisions
+      description: Returns a list of all subdivisions. Requires ADMIN authority.
+      operationId: getAllSubdivisions
+      security:
+        - bearerAuth: [ADMIN]
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubdivisionDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /students/create:
+    post:
+      tags:
+        - Student
+      summary: Create a new student
+      description: Creates a new student with the provided details. Requires EMPLOYEE authority.
+      operationId: createStudent
+      security:
+        - bearerAuth: [EMPLOYEE]
+      requestBody:
+        description: Student to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentDTO'
+      responses:
+        '201':
+          description: Student created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /students/{id}:
+    get:
+      tags:
+        - Student
+      summary: Get student by ID
+      description: Returns a single student by its ID. Requires EMPLOYEE authority.
+      operationId: getStudentById
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of student to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Student not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Student
+      summary: Update an existing student
+      description: Updates an existing student. Requires EMPLOYEE authority.
+      operationId: updateStudent
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of student to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Student data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentDTO'
+      responses:
+        '200':
+          description: Student updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentDTO'
+        '400':
+          description: Invalid ID or input
+        '404':
+          description: Student not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Student
+      summary: Delete a student
+      description: Deletes a student by ID. Requires EMPLOYEE authority.
+      operationId: deleteStudent
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of student to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Student deleted successfully
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Student not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /students/getAll:
+    get:
+      tags:
+        - Student
+      summary: Get all students
+      description: Returns a list of all students. Requires EMPLOYEE authority.
+      operationId: getAllStudents
+      security:
+        - bearerAuth: [EMPLOYEE]
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /scholarships/create:
+    post:
+      tags:
+        - Scholarship
+      summary: Create a new scholarship
+      description: Creates a new scholarship with the provided details. Requires EMPLOYEE authority.
+      operationId: createScholarship
+      security:
+        - bearerAuth: [EMPLOYEE]
+      requestBody:
+        description: Scholarship to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScholarshipDTO'
+      responses:
+        '201':
+          description: Scholarship created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScholarshipDTO'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /scholarships/{id}:
+    get:
+      tags:
+        - Scholarship
+      summary: Get scholarship by ID
+      description: Returns a single scholarship by its ID. Requires EMPLOYEE authority.
+      operationId: getScholarshipById
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of scholarship to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScholarshipDTO'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Scholarship not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Scholarship
+      summary: Update an existing scholarship
+      description: Updates an existing scholarship. Requires EMPLOYEE authority.
+      operationId: updateScholarship
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of scholarship to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Scholarship data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScholarshipDTO'
+      responses:
+        '200':
+          description: Scholarship updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScholarshipDTO'
+        '400':
+          description: Invalid ID or input
+        '404':
+          description: Scholarship not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Scholarship
+      summary: Delete a scholarship
+      description: Deletes a scholarship by ID. Requires EMPLOYEE authority.
+      operationId: deleteScholarship
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of scholarship to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Scholarship deleted successfully
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Scholarship not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /scholarships/getAll:
+    get:
+      tags:
+        - Scholarship
+      summary: Get all scholarships
+      description: Returns a list of all scholarships. Requires EMPLOYEE authority.
+      operationId: getAllScholarships
+      security:
+        - bearerAuth: [EMPLOYEE]
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScholarshipDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /documents/create:
+    post:
+      tags:
+        - Document
+      summary: Create a new document
+      description: Creates a new document with the provided details. Requires EMPLOYEE authority.
+      operationId: createDocument
+      security:
+        - bearerAuth: [EMPLOYEE]
+      requestBody:
+        description: Document to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentDTO'
+      responses:
+        '201':
+          description: Document created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /documents/{id}:
+    get:
+      tags:
+        - Document
+      summary: Get document by ID
+      description: Returns a single document by its ID. Requires EMPLOYEE authority.
+      operationId: getDocumentById
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of document to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDTO'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Document not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Document
+      summary: Update an existing document
+      description: Updates an existing document. Requires EMPLOYEE authority.
+      operationId: updateDocument
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of document to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Document data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentDTO'
+      responses:
+        '200':
+          description: Document updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDTO'
+        '400':
+          description: Invalid ID or input
+        '404':
+          description: Document not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Document
+      summary: Delete a document
+      description: Deletes a document by ID. Requires EMPLOYEE authority.
+      operationId: deleteDocument
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of document to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Document deleted successfully
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Document not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /documents/getAll:
+    get:
+      tags:
+        - Document
+      summary: Get all documents
+      description: Returns a list of all documents. Requires EMPLOYEE authority.
+      operationId: getAllDocuments
+      security:
+        - bearerAuth: [EMPLOYEE]
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /employees/create:
+    post:
+      tags:
+        - Employee
+      summary: Create a new employee
+      description: Creates a new employee with the provided details. Requires ADMIN authority.
+      operationId: createEmployee
+      security:
+        - bearerAuth: [ADMIN]
+      requestBody:
+        description: Employee to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeDTO'
+      responses:
+        '201':
+          description: Employee created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /employees/{id}:
+    get:
+      tags:
+        - Employee
+      summary: Get employee by ID
+      description: Returns a single employee by its ID. Requires ADMIN authority.
+      operationId: getEmployeeById
+      security:
+        - bearerAuth: [ADMIN]
+      parameters:
+        - name: id
+          in: path
+          description: ID of employee to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDTO'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Employee not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Employee
+      summary: Update an existing employee
+      description: Updates an existing employee. Requires ADMIN authority.
+      operationId: updateEmployee
+      security:
+        - bearerAuth: [ADMIN]
+      parameters:
+        - name: id
+          in: path
+          description: ID of employee to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Employee data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeDTO'
+      responses:
+        '200':
+          description: Employee updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDTO'
+        '400':
+          description: Invalid ID or input
+        '404':
+          description: Employee not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Employee
+      summary: Delete an employee
+      description: Deletes an employee by ID. Requires ADMIN authority.
+      operationId: deleteEmployee
+      security:
+        - bearerAuth: [ADMIN]
+      parameters:
+        - name: id
+          in: path
+          description: ID of employee to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Employee deleted successfully
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Employee not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /employees/getAll:
+    get:
+      tags:
+        - Employee
+      summary: Get all employees
+      description: Returns a list of all employees. Requires ADMIN authority.
+      operationId: getAllEmployees
+      security:
+        - bearerAuth: [ADMIN]
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmployeeDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /institutes/create:
+    post:
+      tags:
+        - Institute
+      summary: Create a new institute
+      description: Creates a new institute with the provided details. Requires EMPLOYEE authority.
+      operationId: createInstitute
+      security:
+        - bearerAuth: [EMPLOYEE]
+      requestBody:
+        description: Institute to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstituteDTO'
+      responses:
+        '201':
+          description: Institute created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstituteDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /institutes/{id}:
+    get:
+      tags:
+        - Institute
+      summary: Get institute by ID
+      description: Returns a single institute by its ID. Requires EMPLOYEE authority.
+      operationId: getInstituteById
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of institute to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstituteDTO'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Institute not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Institute
+      summary: Update an existing institute
+      description: Updates an existing institute. Requires EMPLOYEE authority.
+      operationId: updateInstitute
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of institute to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Institute data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstituteDTO'
+      responses:
+        '200':
+          description: Institute updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstituteDTO'
+        '400':
+          description: Invalid ID or input
+        '404':
+          description: Institute not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Institute
+      summary: Delete an institute
+      description: Deletes an institute by ID. Requires EMPLOYEE authority.
+      operationId: deleteInstitute
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of institute to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Institute deleted successfully
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Institute not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /institutes/getAll:
+    get:
+      tags:
+        - Institute
+      summary: Get all institutes
+      description: Returns a list of all institutes. Requires EMPLOYEE authority.
+      operationId: getAllInstitutes
+      security:
+        - bearerAuth: [EMPLOYEE]
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InstituteDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /job-titles/create:
+    post:
+      tags:
+        - JobTitle
+      summary: Create a new job title
+      description: Creates a new job title with the provided details. Requires ADMIN authority.
+      operationId: createJobTitle
+      security:
+        - bearerAuth: [ADMIN]
+      requestBody:
+        description: Job title to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTitleDTO'
+      responses:
+        '201':
+          description: Job title created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobTitleDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /job-titles/{id}:
+    get:
+      tags:
+        - JobTitle
+      summary: Get job title by ID
+      description: Returns a single job title by its ID. Requires ADMIN authority.
+      operationId: getJobTitleById
+      security:
+        - bearerAuth: [ADMIN]
+      parameters:
+        - name: id
+          in: path
+          description: ID of job title to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobTitleDTO'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Job title not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - JobTitle
+      summary: Update an existing job title
+      description: Updates an existing job title. Requires ADMIN authority.
+      operationId: updateJobTitle
+      security:
+        - bearerAuth: [ADMIN]
+      parameters:
+        - name: id
+          in: path
+          description: ID of job title to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Job title data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTitleDTO'
+      responses:
+        '200':
+          description: Job title updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobTitleDTO'
+        '400':
+          description: Invalid ID or input
+        '404':
+          description: Job title not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - JobTitle
+      summary: Delete a job title
+      description: Deletes a job title by ID. Requires ADMIN authority.
+      operationId: deleteJobTitle
+      security:
+        - bearerAuth: [ADMIN]
+      parameters:
+        - name: id
+          in: path
+          description: ID of job title to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Job title deleted successfully
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Job title not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /job-titles/getAll:
+    get:
+      tags:
+        - JobTitle
+      summary: Get all job titles
+      description: Returns a list of all job titles. Requires ADMIN authority.
+      operationId: getAllJobTitles
+      security:
+        - bearerAuth: [ADMIN]
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobTitleDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /kafedras/create:
+    post:
+      tags:
+        - Kafedra
+      summary: Create a new kafedra
+      description: Creates a new kafedra (department) with the provided details. Requires EMPLOYEE authority.
+      operationId: createKafedra
+      security:
+        - bearerAuth: [EMPLOYEE]
+      requestBody:
+        description: Kafedra to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KafedraDTO'
+      responses:
+        '201':
+          description: Kafedra created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KafedraDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /kafedras/{id}:
+    get:
+      tags:
+        - Kafedra
+      summary: Get kafedra by ID
+      description: Returns a single kafedra by its ID. Requires EMPLOYEE authority.
+      operationId: getKafedraById
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of kafedra to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KafedraDTO'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Kafedra not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Kafedra
+      summary: Update an existing kafedra
+      description: Updates an existing kafedra. Requires EMPLOYEE authority.
+      operationId: updateKafedra
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of kafedra to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Kafedra data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KafedraDTO'
+      responses:
+        '200':
+          description: Kafedra updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KafedraDTO'
+        '400':
+          description: Invalid ID or input
+        '404':
+          description: Kafedra not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Kafedra
+      summary: Delete a kafedra
+      description: Deletes a kafedra by ID. Requires EMPLOYEE authority.
+      operationId: deleteKafedra
+      security:
+        - bearerAuth: [EMPLOYEE]
+      parameters:
+        - name: id
+          in: path
+          description: ID of kafedra to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Kafedra deleted successfully
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Kafedra not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /kafedras/getAll:
+    get:
+      tags:
+        - Kafedra
+      summary: Get all kafedras
+      description: Returns a list of all kafedras. Requires EMPLOYEE authority.
+      operationId: getAllKafedras
+      security:
+        - bearerAuth: [EMPLOYEE]
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KafedraDTO'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    SubdivisionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          description: Subdivision ID
+        name:
+          type: string
+          example: "Human Resources"
+          description: Name of the subdivision
+      required:
+        - name
+    ScholarshipDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          description: Scholarship ID
+        name:
+          type: string
+          example: "Academic Excellence Scholarship"
+          description: Name of the scholarship
+        amount:
+          type: string
+          example: "$5000"
+          description: Amount awarded by the scholarship
+        scholarshipType:
+          type: string
+          enum:
+            - ACADEMIC
+            - SOCIAL
+            - PRESIDENT
+          example: "ACADEMIC"
+          description: Type of the scholarship (ACADEMIC, SOCIAL, or PRESIDENT)
+      required:
+        - name
+        - amount
+        - scholarshipType
+    DocumentDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          readOnly: true
+        name:
+          type: string
+          example: "document.pdf"
+          description: Name of the document
+        bytes:
+          type: string
+          format: byte
+          example: "base64-encoded-content"
+          description: Document content as base64 encoded string
+        userId:
+          type: integer
+          format: int64
+          example: 123
+          description: ID of the user who owns the document
+      required:
+        - name
+        - bytes
+        - userId
+
+    EmployeeDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          readOnly: true
+          description: Employee ID
+        person:
+          $ref: '#/components/schemas/PersonDTO'
+        jobTitleId:
+          type: integer
+          format: int64
+          example: 2
+          description: ID of the job title
+        userId:
+          type: integer
+          format: int64
+          example: 3
+          description: ID of the associated user
+    StudentDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          description: Student ID
+        person:
+          $ref: '#/components/schemas/PersonDTO'
+        yearStarted:
+          type: integer
+          example: 2021
+          description: Year the student started their studies
+        financialForm:
+          type: string
+          enum:
+            - TARGETING
+            - BUDGET
+            - PAYMENT
+          example: "BUDGET"
+          description: The financial form for the student
+      required:
+        - person
+        - yearStarted
+        - financialForm
+
+
+    FinancialForm:
+      type: string
+      enum:
+        - TARGETING
+        - BUDGET
+        - PAYMENT
+      description: Type of financial form for the student
+
+    PersonDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "John"
+          description: First name
+        surname:
+          type: string
+          example: "Doe"
+          description: Last name
+        patronymic:
+          type: string
+          example: "Smith"
+          description: Middle name (optional)
+          nullable: true
+        phone:
+          type: string
+          example: "+1234567890"
+          description: Phone number
+
+    InstituteDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          readOnly: true
+          description: Institute ID
+        name:
+          type: string
+          example: "Tech Institute"
+          description: Name of the institute
+        email:
+          type: string
+          format: email
+          example: "contact@techinstitute.com"
+          description: Contact email
+        phone:
+          type: string
+          example: "+1234567890"
+          description: Contact phone number
+      required:
+        - name
+        - email
+        - phone
+
+    JobTitleDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          readOnly: true
+          description: Job title ID
+        name:
+          type: string
+          example: "Software Engineer"
+          description: Name of the job title
+        description:
+          type: string
+          example: "Develops software applications"
+          description: Description of the job title
+          nullable: true
+        subdivisionId:
+          type: integer
+          format: int64
+          example: 5
+          description: ID of the associated subdivision
+      required:
+        - name
+        - subdivisionId
+
+    KafedraDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          readOnly: true
+          description: Kafedra ID
+        name:
+          type: string
+          example: "Computer Science Department"
+          description: Name of the kafedra
+        email:
+          type: string
+          format: email
+          example: "cs@university.edu"
+          description: Contact email
+        room:
+          type: string
+          example: "Room 101"
+          description: Room number/location
+        phone:
+          type: string
+          example: "+1234567890"
+          description: Contact phone number
+        credentialsNonExpired:
+          type: boolean
+          example: true
+          description: Indicates if credentials are non-expired
+        instituteId:
+          type: integer
+          format: int64
+          example: 1
+          description: ID of the associated institute
+      required:
+        - name
+        - email
+        - phone
+        - instituteId
+
+    Error:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2023-10-01T12:00:00Z"
+        status:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "Invalid input data"
+        path:
+          type: string
+          example: "/api/v1/documents"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token authentication
