@@ -1,0 +1,1 @@
+# dekanat_stankin_pet_project
